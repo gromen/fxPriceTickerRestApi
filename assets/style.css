@@ -1,0 +1,12 @@
+.priceTicker {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.priceTicker thead {
+  text-align: left;
+}
+
+.priceTicker_cell {
+  width: 25%;
+}

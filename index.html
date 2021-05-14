@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/style.css">
+  </head>
+  <body>
+    <table class="priceTicker">
+      <thead>
+        <tr>
+          <th>Instrument name</th>
+          <th>Bid</th>
+          <th>Ask</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody class="js-priceTicker__body"></tbody>
+    </table>
+
+    <script>
+      const URL = "http://localhost:5000/api/";
+
+      function getAllPrices() {
+        fetch(URL)
+          .then((response) => response.json())
+          .then(data => {
+            const prices = data.data;
+            const container = document.querySelector('tbody');
+            container.innerHTML = prices.map(item => `
+              <tr>
+                <td class="priceTicker_cell priceTicker__instrumentName">${item.name}</td>
+                <td class="priceTicker_cell priceTicker__instrumentBid">${item.bid.toFixed(4)}</td>
+                <td class="priceTicker_cell priceTicker__instrumentAsk">${item.ask.toFixed(4)}</td>
+                <td class="priceTicker_cell priceTicker__instrumentTimestamp">
+                  ${formatDate('en-US', new Date)}
+                </td>
+              </tr>
+            `).join('');
+          });
+
+      }
+
+      function formatDate(locales, timestamp) {
+        return Intl.DateTimeFormat(locales).format(timestamp);
+      }
+
+      function fetchLatestPrices(id) {
+        fetch(`${URL}getLatestPrice/${id}`)
+          .then(response => response.json())
+          .then(data => console.log(data));
+      }
+
+      getAllPrices()
+    </script>
+  </body>
+</html>
